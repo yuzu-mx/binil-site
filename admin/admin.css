@@ -173,6 +173,15 @@ h3 {
   text-transform: uppercase;
   color: var(--olive-dark);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.back-btn {
+  padding: 10px 16px;
+  min-height: 36px;
 }
 
 .status-panel {
