@@ -49,6 +49,11 @@ function renderCards(target, items) {
   }
 
   items.forEach((item) => {
+    const statusLabel = item.status
+      ? item.status === "Wishlist"
+        ? `💫 ${item.status}`
+        : `✅ ${item.status}`
+      : "";
     const card = document.createElement("article");
     card.className = "card";
     card.innerHTML = `
@@ -59,7 +64,7 @@ function renderCards(target, items) {
       </div>
       <div class="meta">
         ${item.year ? `<span class="chip">${item.year}</span>` : ""}
-        ${item.status ? `<span class="chip">${item.status}</span>` : ""}
+        ${statusLabel ? `<span class="chip">${statusLabel}</span>` : ""}
       </div>
     `;
     target.appendChild(card);
@@ -129,6 +134,7 @@ async function fetchRecords() {
     if (!response.ok) throw new Error(data.error || "Error al cargar");
 
     records = data.records.map(formatRecord);
+    records.sort((a, b) => a.artist.localeCompare(b.artist));
 
     fuse = new Fuse(records, {
       keys: ["album", "artist", "year", "status"],

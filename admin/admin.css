@@ -11,7 +11,7 @@
   --radius-lg: 28px;
   --radius-md: 18px;
   --radius-sm: 12px;
-  --font-title: "Bungee Shade", cursive;
+  --font-title: "Monoton", cursive;
   --font-body: "Figtree", sans-serif;
 }
 
@@ -43,7 +43,7 @@ body {
 }
 
 .admin-actions {
-  background: rgba(255, 255, 255, 0.6);
+  background: transparent;
   padding: 0;
   border-radius: 0;
   border: none;
@@ -243,6 +243,7 @@ h3 {
   background: #fffaf0;
   font-size: 1rem;
   box-shadow: inset 0 0 0 1px rgba(34, 45, 0, 0.06);
+  max-width: 100%;
 }
 
 .form-grid input:focus,
@@ -327,6 +328,7 @@ h3 {
 
 .user-menu {
   position: relative;
+  margin-left: auto;
 }
 
 .user-chip {
@@ -391,15 +393,26 @@ body.admin-locked .admin-panel {
     padding: 18px 12px 46px;
   }
 
+  .card {
+    padding: 16px;
+  }
+
+  .form-grid input,
+  .form-grid select {
+    padding: 12px 12px;
+    font-size: 0.95rem;
+  }
+
   .admin-actions {
     width: 100%;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
+    align-items: center;
   }
 
   .admin-actions .ghost-btn,
   .admin-actions .google-btn {
-    flex: 1 1 auto;
     justify-content: center;
     font-size: 0.68rem;
     padding: 8px 10px;
@@ -407,7 +420,8 @@ body.admin-locked .admin-panel {
   }
 
   .user-menu {
-    order: 3;
+    grid-column: 2 / 3;
+    justify-self: end;
   }
 
   .record-row {
