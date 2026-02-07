@@ -230,6 +230,12 @@ async function uploadImage(file) {
   return data.secure_url;
 }
 
+function setUserBadge(user) {
+  if (!user || !user.email) return;
+  userEmail.textContent = user.email;
+  userChip.textContent = user.email.slice(0, 2).toUpperCase();
+}
+
 function setupIdentity(identity) {
   if (!identity) {
     setStatus("No se pudo cargar el login. Recarga la página.");
@@ -248,8 +254,9 @@ function setupIdentity(identity) {
     identity.logout();
   });
 
-  identity.on("login", async () => {
+  identity.on("login", async (user) => {
     identity.close();
+    setUserBadge(user);
     await checkAccess(identity);
   });
 
@@ -260,10 +267,7 @@ function setupIdentity(identity) {
   });
 
   identity.on("init", async (user) => {
-    if (user && user.email) {
-      userEmail.textContent = user.email;
-      userChip.textContent = user.email.slice(0, 2).toUpperCase();
-    }
+    setUserBadge(user);
     await checkAccess(identity);
   });
 
@@ -273,6 +277,19 @@ function setupIdentity(identity) {
   if (params.get("login") === "1") {
     identity.open("login", { loginMethod: "google" });
   }
+
+  // Fallback: wait for identity to populate user
+  let attempts = 0;
+  const poll = setInterval(async () => {
+    const user = identity.currentUser();
+    if (user) {
+      setUserBadge(user);
+      await checkAccess(identity);
+      clearInterval(poll);
+    }
+    attempts += 1;
+    if (attempts > 10) clearInterval(poll);
+  }, 500);
 }
 
 createForm.addEventListener("submit", async (event) => {

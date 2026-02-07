@@ -137,6 +137,7 @@ h3 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--olive-dark);
+  text-decoration: none;
 }
 
 .status-panel {
