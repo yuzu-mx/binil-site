@@ -43,6 +43,8 @@ function formatRecord(record) {
     year: record.fields["Album Year"] || "",
     artist: record.fields["Artist"] || "",
     status: record.fields["Status"] || "",
+    gift: record.fields["Gift"] || "",
+    gender: record.fields["Gender"] || "",
     image: thumb || (imageField && imageField.url) || fallbackCover,
   };
 }
@@ -61,6 +63,8 @@ function renderCards(target, items) {
         : `✅ ${item.status}`
       : "";
     const card = document.createElement("article");
+    const giftLabel = item.gift ? `🎁 ${item.gift}` : "";
+    const genderLabel = item.gender ? `✨ ${item.gender}` : "";
     card.className = "card";
     card.innerHTML = `
       <div class="image-wrap skeleton">
@@ -73,6 +77,8 @@ function renderCards(target, items) {
       <div class="meta">
         ${item.year ? `<span class="chip">${item.year}</span>` : ""}
         ${statusLabel ? `<span class="chip">${statusLabel}</span>` : ""}
+        ${giftLabel ? `<span class="chip">${giftLabel}</span>` : ""}
+        ${genderLabel ? `<span class="chip">${genderLabel}</span>` : ""}
       </div>
     `;
     const img = card.querySelector("img");

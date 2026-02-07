@@ -187,11 +187,13 @@ async function createRecord(formData) {
     imageUrl = await uploadImage(file);
   }
 
-  const payload = {
+    const payload = {
     album: formData.get("album"),
     artist: formData.get("artist"),
     year: formData.get("year"),
     status: formData.get("status"),
+    gift: formData.get("gift"),
+    gender: formData.get("gender"),
     image: imageUrl,
   };
 
@@ -413,6 +415,8 @@ recordsList.addEventListener("click", async (event) => {
     editForm.artist.value = record.artist || "";
     editForm.year.value = record.year || "";
     editForm.status.value = record.status || "";
+    editForm.gift.value = record.gift || "";
+    editForm.gender.value = record.gender || "";
     if (record.image) {
       editPreviewImg.src = record.image;
       editImagePreview.hidden = false;
@@ -465,6 +469,8 @@ editForm.addEventListener("submit", async (event) => {
     artist: editForm.artist.value,
     year: editForm.year.value,
     status: editForm.status.value,
+    gift: editForm.gift.value,
+    gender: editForm.gender.value,
     image: imageUrl,
   });
 

@@ -92,6 +92,8 @@ function mapRecord(record) {
     artist: fields["Artist"] || "",
     year: fields["Album Year"] || "",
     status: fields["Status"] || "",
+    gift: fields["Gift"] || "",
+    gender: fields["Gender"] || "",
     image: imageField || "",
   };
 }
@@ -112,6 +114,12 @@ async function createRecord(payload) {
 
   if (payload.status) {
     fields.Status = payload.status;
+  }
+  if (payload.gift) {
+    fields.Gift = payload.gift;
+  }
+  if (payload.gender) {
+    fields.Gender = payload.gender;
   }
 
   if (payload.image) {
@@ -151,6 +159,12 @@ async function updateRecord(payload) {
 
   if (payload.status) {
     fields.Status = payload.status;
+  }
+  if (payload.gift) {
+    fields.Gift = payload.gift;
+  }
+  if (payload.gender) {
+    fields.Gender = payload.gender;
   }
 
   if (payload.image) {
