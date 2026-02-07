@@ -41,7 +41,6 @@ async function checkAccess() {
   if (!user) {
     showAdmin(false);
     setStatus("Conecta tu cuenta para continuar.");
-    netlifyIdentity.open("login", { loginMethod: "google" });
     return false;
   }
 
@@ -351,3 +350,8 @@ editImageFileInput.addEventListener("change", () => {
 
 netlifyIdentity.init();
 checkAccess();
+
+const params = new URLSearchParams(window.location.search);
+if (params.get("login") === "1") {
+  netlifyIdentity.open("login", { loginMethod: "google" });
+}
