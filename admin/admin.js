@@ -16,8 +16,8 @@ const previewImg = document.getElementById("previewImg");
 let records = [];
 let pendingDeleteId = null;
 
-const CLOUDINARY_CLOUD_NAME = "REEMPLAZA_ESTO";
-const CLOUDINARY_UPLOAD_PRESET = "REEMPLAZA_ESTO";
+const CLOUDINARY_CLOUD_NAME = "dvu2hx2hf";
+const CLOUDINARY_UPLOAD_PRESET = "binil_unsigned";
 
 function setStatus(text) {
   statusMessage.textContent = text;
