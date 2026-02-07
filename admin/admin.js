@@ -24,6 +24,7 @@ const logoutBtnMini = document.getElementById("logoutBtnMini");
 const saveBtn = document.getElementById("saveBtn");
 const toast = document.getElementById("toast");
 const userDropdown = userMenu ? userMenu.querySelector(".user-dropdown") : null;
+const adminSearch = document.getElementById("adminSearch");
 
 let toastTimer = null;
 
@@ -172,6 +173,7 @@ async function loadRecords(token) {
     return;
   }
   records = data.records || [];
+  records.sort((a, b) => a.artist.localeCompare(b.artist));
   renderRecords();
 }
 
@@ -363,6 +365,12 @@ if (userChip && userDropdown) {
   });
 }
 
+if (adminSearch) {
+  adminSearch.addEventListener("input", (event) => {
+    filterAdminRecords(event.target.value);
+  });
+}
+
 createForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const formData = new FormData(createForm);
@@ -490,3 +498,22 @@ window.addEventListener("load", () => {
   const identity = window.netlifyIdentity || null;
   setupIdentity(identity);
 });
+function filterAdminRecords(query) {
+  const term = query.trim().toLowerCase();
+  if (!term) {
+    renderRecords();
+    return;
+  }
+  const filtered = records.filter((record) =>
+    [record.album, record.artist, record.year, record.status]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase()
+      .includes(term)
+  );
+  if (!filtered.length) {
+    recordsList.innerHTML = "<p>No hay resultados.</p>";
+    return;
+  }
+  recordsList.innerHTML = filtered.map(recordRowTemplate).join("");
+}
