@@ -182,6 +182,20 @@ h3 {
   grid-column: 1 / -1;
 }
 
+.image-preview {
+  border-radius: 16px;
+  padding: 12px;
+  background: #fff7e3;
+  border: 1px dashed rgba(34, 45, 0, 0.2);
+}
+
+.image-preview img {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
 .records-list {
   display: grid;
   gap: 12px;
@@ -222,6 +236,15 @@ h3 {
   gap: 10px;
   justify-content: flex-end;
   margin-top: 16px;
+}
+
+.netlify-identity-widget .form,
+.netlify-identity-widget .login,
+.netlify-identity-widget .password,
+.netlify-identity-widget .toggle,
+.netlify-identity-widget .forgot-password,
+.netlify-identity-widget .separator {
+  display: none !important;
 }
 
 @media (max-width: 720px) {

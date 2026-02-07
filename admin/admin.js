@@ -9,9 +9,15 @@ const refreshBtn = document.getElementById("refreshBtn");
 const confirmDialog = document.getElementById("confirmDialog");
 const cancelDeleteBtn = document.getElementById("cancelDelete");
 const confirmDeleteBtn = document.getElementById("confirmDelete");
+const imageFileInput = document.getElementById("imageFile");
+const imagePreview = document.getElementById("imagePreview");
+const previewImg = document.getElementById("previewImg");
 
 let records = [];
 let pendingDeleteId = null;
+
+const CLOUDINARY_CLOUD_NAME = "REEMPLAZA_ESTO";
+const CLOUDINARY_UPLOAD_PRESET = "REEMPLAZA_ESTO";
 
 function setStatus(text) {
   statusMessage.textContent = text;
@@ -95,12 +101,18 @@ async function createRecord(formData) {
   const user = netlifyIdentity.currentUser();
   const token = await user.jwt(true);
 
+  let imageUrl = "";
+  const file = imageFileInput.files && imageFileInput.files[0];
+  if (file) {
+    imageUrl = await uploadImage(file);
+  }
+
   const payload = {
     album: formData.get("album"),
     artist: formData.get("artist"),
     year: formData.get("year"),
     status: formData.get("status"),
-    image: formData.get("image"),
+    image: imageUrl,
   };
 
   const response = await fetch("/.netlify/functions/admin", {
@@ -166,6 +178,29 @@ async function deleteRecord(id) {
   setStatus("Registro eliminado.");
 }
 
+async function uploadImage(file) {
+  if (!CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME === "REEMPLAZA_ESTO") {
+    throw new Error("Configura Cloudinary en admin.js");
+  }
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error?.message || "Error al subir imagen");
+  }
+  return data.secure_url;
+}
+
 loginBtn.addEventListener("click", () => {
   netlifyIdentity.open("login", { loginMethod: "google" });
 });
@@ -187,7 +222,11 @@ netlifyIdentity.on("logout", () => {
 createForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const formData = new FormData(createForm);
-  await createRecord(formData);
+  try {
+    await createRecord(formData);
+  } catch (error) {
+    setStatus(error.message || "Error al guardar.");
+  }
 });
 
 refreshBtn.addEventListener("click", async () => {
@@ -238,6 +277,17 @@ confirmDeleteBtn.addEventListener("click", async () => {
   await deleteRecord(pendingDeleteId);
   pendingDeleteId = null;
   confirmDialog.close();
+});
+
+imageFileInput.addEventListener("change", () => {
+  const file = imageFileInput.files && imageFileInput.files[0];
+  if (!file) {
+    imagePreview.hidden = true;
+    previewImg.src = "";
+    return;
+  }
+  previewImg.src = URL.createObjectURL(file);
+  imagePreview.hidden = false;
 });
 
 netlifyIdentity.init();

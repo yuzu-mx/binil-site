@@ -58,9 +58,12 @@
               </select>
             </label>
             <label class="full">
-              Imagen (URL)
-              <input name="image" type="url" placeholder="https://..." />
+              Imagen (foto desde el celular)
+              <input name="imageFile" id="imageFile" type="file" accept="image/*" capture="environment" />
             </label>
+            <div id="imagePreview" class="image-preview full" hidden>
+              <img id="previewImg" alt="Vista previa" />
+            </div>
             <button class="primary-btn full" type="submit">Guardar vinil</button>
           </form>
         </div>
