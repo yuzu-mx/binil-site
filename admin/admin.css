@@ -399,6 +399,10 @@ body.admin-locked .admin-panel {
   display: none;
 }
 
+body.admin-auth .auth-hide {
+  display: none !important;
+}
+
 .netlify-identity-widget .form,
 .netlify-identity-widget .login,
 .netlify-identity-widget .password,
