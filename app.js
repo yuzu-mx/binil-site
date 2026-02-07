@@ -180,6 +180,14 @@ searchInput.addEventListener("input", (event) => {
   updateResults(event.target.value.trim());
 });
 
+searchInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    updateResults(searchInput.value.trim());
+    document.getElementById("results").scrollIntoView({ behavior: "smooth" });
+  }
+});
+
 clearSearchBtn.addEventListener("click", () => {
   searchInput.value = "";
   updateResults("");
