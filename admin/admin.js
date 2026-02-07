@@ -1,5 +1,4 @@
 const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logoutBtn");
 const statusMessage = document.getElementById("statusMessage");
 const statusPanel = document.getElementById("statusPanel");
 const adminPanel = document.getElementById("adminPanel");
@@ -56,7 +55,6 @@ function setLocked(locked) {
 
 function showAdmin(show) {
   adminPanel.hidden = !show;
-  logoutBtn.hidden = true;
   loginBtn.hidden = show;
   userMenu.hidden = !show;
   setLocked(!show);
@@ -307,10 +305,6 @@ function setupIdentity(identity) {
 
   loginBtn.addEventListener("click", () => {
     identity.open("login", { loginMethod: "google" });
-  });
-
-  logoutBtn.addEventListener("click", () => {
-    identity.logout();
   });
 
   logoutBtnMini.addEventListener("click", () => {
