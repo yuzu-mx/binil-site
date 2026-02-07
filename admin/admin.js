@@ -60,7 +60,7 @@ async function checkAccess(identity) {
   }
 
   setStatus("Validando acceso...");
-  const token = await user.jwt(true);
+  const token = user.token?.access_token || (await user.jwt());
   let response;
   let data = {};
   try {
@@ -77,7 +77,8 @@ async function checkAccess(identity) {
 
   if (!response.ok || !data.allowed) {
     showAdmin(false);
-    const errorMessage = data.error || "No se pudo validar el acceso.";
+    const errorMessage =
+      data.error || "No se pudo validar el acceso. Token o sesión inválida.";
     setStatus(errorMessage);
 
     if (response.status === 403) {
@@ -283,7 +284,9 @@ function setupIdentity(identity) {
     setTimeout(() => {
       const current = identity.currentUser();
       if (!current) {
-        setStatus("No se pudo completar el login. Revisa que tu usuario esté invitado en Netlify Identity.");
+        setStatus(
+          "No se pudo completar el login. Revisa que tu usuario esté invitado en Netlify Identity."
+        );
         return;
       }
       checkAccess(identity);
