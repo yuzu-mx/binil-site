@@ -86,6 +86,12 @@ async function fetchRecords() {
 function mapRecord(record) {
   const fields = record.fields || {};
   const imageField = fields.Images && fields.Images[0] && fields.Images[0].url;
+  const rawGender = fields["Gender"];
+  const genderValue = Array.isArray(rawGender)
+    ? rawGender.join(", ")
+    : rawGender && typeof rawGender === "object"
+      ? rawGender.name || rawGender.value || rawGender.text || rawGender.result || ""
+      : rawGender || "";
   return {
     id: record.id,
     album: fields["Album Name"] || "",
@@ -93,7 +99,7 @@ function mapRecord(record) {
     year: fields["Album Year"] || "",
     status: fields["Status"] || "",
     gift: fields["Gift"] || "",
-    gender: fields["Gender"] || "",
+    gender: genderValue,
     image: imageField || "",
   };
 }

@@ -37,6 +37,13 @@ function formatRecord(record) {
         imageField.thumbnails.small?.url ||
         imageField.thumbnails.full?.url)) ||
     "";
+  const rawGender = record.fields["Gender"];
+  const genderValue = Array.isArray(rawGender)
+    ? rawGender.join(", ")
+    : rawGender && typeof rawGender === "object"
+      ? rawGender.name || rawGender.value || rawGender.text || rawGender.result || ""
+      : rawGender || "";
+
   return {
     id: record.id,
     album: record.fields["Album Name"] || "Sin título",
@@ -44,7 +51,7 @@ function formatRecord(record) {
     artist: record.fields["Artist"] || "",
     status: record.fields["Status"] || "",
     gift: record.fields["Gift"] || "",
-    gender: record.fields["Gender"] || "",
+    gender: genderValue,
     image: thumb || (imageField && imageField.url) || fallbackCover,
   };
 }
