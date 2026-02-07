@@ -22,6 +22,7 @@ const userMenu = document.getElementById("userMenu");
 const userChip = document.getElementById("userChip");
 const userEmail = document.getElementById("userEmail");
 const logoutBtnMini = document.getElementById("logoutBtnMini");
+const saveBtn = document.getElementById("saveBtn");
 
 let records = [];
 let pendingDeleteId = null;
@@ -329,10 +330,13 @@ function setupIdentity(identity) {
 createForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const formData = new FormData(createForm);
+  if (saveBtn) saveBtn.classList.add("loading");
   try {
     await createRecord(formData);
   } catch (error) {
     setStatus(error.message || "Error al guardar.");
+  } finally {
+    if (saveBtn) saveBtn.classList.remove("loading");
   }
 });
 

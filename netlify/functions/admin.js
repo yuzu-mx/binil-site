@@ -107,7 +107,7 @@ async function createRecord(payload) {
   };
 
   if (payload.year) {
-    fields["Album Year"] = Number(payload.year);
+    fields["Album Year"] = String(payload.year);
   }
 
   if (payload.status) {
@@ -146,7 +146,7 @@ async function updateRecord(payload) {
   };
 
   if (payload.year) {
-    fields["Album Year"] = Number(payload.year);
+    fields["Album Year"] = String(payload.year);
   }
 
   if (payload.status) {

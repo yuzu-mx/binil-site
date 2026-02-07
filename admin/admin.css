@@ -30,7 +30,7 @@ body {
 .admin-shell {
   max-width: 980px;
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: 36px 20px 70px;
 }
 
 .admin-header {
@@ -124,6 +124,33 @@ h3 {
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
+.primary-btn .btn-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(34, 45, 0, 0.2);
+  border-top-color: var(--olive-dark);
+  display: none;
+  animation: spin 0.8s linear infinite;
+}
+
+.primary-btn.loading .btn-spinner {
+  display: inline-block;
+}
+
+.primary-btn.loading .btn-text {
+  opacity: 0.7;
+}
+
+.primary-btn.loading {
+  pointer-events: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .primary-btn:hover {
   transform: translateY(-2px);
   background: var(--olive-dark);
@@ -333,7 +360,26 @@ body.admin-locked .admin-panel {
 
 @media (max-width: 720px) {
   .admin-shell {
-    padding: 30px 18px 60px;
+    padding: 22px 14px 50px;
+  }
+
+  .admin-actions {
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .admin-actions .ghost-btn,
+  .admin-actions .google-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    font-size: 0.7rem;
+    padding: 8px 12px;
+  }
+
+  .user-menu {
+    order: 3;
   }
 
   .record-row {
