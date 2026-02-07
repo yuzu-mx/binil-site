@@ -34,6 +34,7 @@ async function checkAccess() {
   if (!user) {
     showAdmin(false);
     setStatus("Conecta tu cuenta para continuar.");
+    netlifyIdentity.open("login", { loginMethod: "google" });
     return false;
   }
 
@@ -50,6 +51,7 @@ async function checkAccess() {
     showAdmin(false);
     setStatus("Tu correo no tiene acceso. Contacta al administrador.");
     netlifyIdentity.logout();
+    window.location.href = "/admin/no-access.html";
     return false;
   }
 

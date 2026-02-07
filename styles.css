@@ -69,6 +69,12 @@ body {
   padding: 24px 7vw;
 }
 
+.header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .brand {
   display: flex;
   align-items: center;
