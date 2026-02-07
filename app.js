@@ -29,15 +29,21 @@ const fallbackCover =
 
 
 function formatRecord(record) {
+  const imageField = record.fields.Images && record.fields.Images[0];
+  const thumb =
+    (imageField &&
+      imageField.thumbnails &&
+      (imageField.thumbnails.large?.url ||
+        imageField.thumbnails.small?.url ||
+        imageField.thumbnails.full?.url)) ||
+    "";
   return {
     id: record.id,
     album: record.fields["Album Name"] || "Sin título",
     year: record.fields["Album Year"] || "",
     artist: record.fields["Artist"] || "",
     status: record.fields["Status"] || "",
-    image:
-      (record.fields.Images && record.fields.Images[0] && record.fields.Images[0].url) ||
-      fallbackCover,
+    image: thumb || (imageField && imageField.url) || fallbackCover,
   };
 }
 
@@ -57,7 +63,9 @@ function renderCards(target, items) {
     const card = document.createElement("article");
     card.className = "card";
     card.innerHTML = `
-      <img src="${item.image}" alt="${item.album}" loading="lazy" />
+      <div class="image-wrap skeleton">
+        <img src="${item.image}" alt="${item.album}" loading="lazy" decoding="async" />
+      </div>
       <div>
         <h3>${item.album}</h3>
         <p>${item.artist}</p>
@@ -67,6 +75,13 @@ function renderCards(target, items) {
         ${statusLabel ? `<span class="chip">${statusLabel}</span>` : ""}
       </div>
     `;
+    const img = card.querySelector("img");
+    const wrap = card.querySelector(".image-wrap");
+    if (img && wrap) {
+      img.addEventListener("load", () => {
+        wrap.classList.remove("skeleton");
+      });
+    }
     target.appendChild(card);
   });
 }
