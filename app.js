@@ -101,7 +101,7 @@ function updateAllRecords() {
 
   renderCards(allGrid, pageItems);
   allCount.textContent = `${filtered.length} registros`;
-  pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+  pageInfo.textContent = `${currentPage} de ${totalPages}`;
 
   prevPageBtn.disabled = currentPage === 1;
   nextPageBtn.disabled = currentPage === totalPages;
