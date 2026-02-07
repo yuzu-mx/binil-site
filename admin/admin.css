@@ -201,12 +201,21 @@ h3 {
 
 .record-row {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
   gap: 12px;
   padding: 12px 14px;
   border-radius: 14px;
   background: #fdf8ed;
   align-items: center;
+}
+
+.record-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #efe7cf;
+  box-shadow: 0 8px 14px rgba(18, 16, 8, 0.18);
 }
 
 .record-row small {
@@ -234,6 +243,10 @@ h3 {
   gap: 10px;
   justify-content: flex-end;
   margin-top: 16px;
+}
+
+.edit-dialog {
+  max-width: 540px;
 }
 
 .netlify-identity-widget .form,

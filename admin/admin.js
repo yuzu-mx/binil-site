@@ -12,9 +12,16 @@ const confirmDeleteBtn = document.getElementById("confirmDelete");
 const imageFileInput = document.getElementById("imageFile");
 const imagePreview = document.getElementById("imagePreview");
 const previewImg = document.getElementById("previewImg");
+const editDialog = document.getElementById("editDialog");
+const editForm = document.getElementById("editForm");
+const cancelEditBtn = document.getElementById("cancelEdit");
+const editImageFileInput = document.getElementById("editImageFile");
+const editImagePreview = document.getElementById("editImagePreview");
+const editPreviewImg = document.getElementById("editPreviewImg");
 
 let records = [];
 let pendingDeleteId = null;
+let pendingEditId = null;
 
 const CLOUDINARY_CLOUD_NAME = "dvu2hx2hf";
 const CLOUDINARY_UPLOAD_PRESET = "binil_unsigned";
@@ -62,8 +69,12 @@ async function checkAccess() {
 }
 
 function recordRowTemplate(record) {
+  const image = record.image
+    ? `<img class="record-thumb" src="${record.image}" alt="${record.album}" />`
+    : `<div class="record-thumb"></div>`;
   return `
     <div class="record-row" data-id="${record.id}">
+      ${image}
       <div>
         <strong>${record.album}</strong> — ${record.artist}
         <div><small>${record.year || "Sin año"} · ${record.status || "Sin status"}</small></div>
@@ -254,18 +265,20 @@ recordsList.addEventListener("click", async (event) => {
   }
 
   if (action === "edit") {
-    const album = prompt("Album", record.album);
-    if (album === null) return;
-    const artist = prompt("Artista", record.artist);
-    if (artist === null) return;
-    const year = prompt("Año", record.year || "");
-    if (year === null) return;
-    const status = prompt("Status (Lo tengo / Wishlist)", record.status || "");
-    if (status === null) return;
-    const image = prompt("Imagen URL", record.image || "");
-    if (image === null) return;
-
-    await updateRecord(id, { album, artist, year, status, image });
+    pendingEditId = id;
+    editForm.album.value = record.album || "";
+    editForm.artist.value = record.artist || "";
+    editForm.year.value = record.year || "";
+    editForm.status.value = record.status || "";
+    if (record.image) {
+      editPreviewImg.src = record.image;
+      editImagePreview.hidden = false;
+    } else {
+      editPreviewImg.src = "";
+      editImagePreview.hidden = true;
+    }
+    editImageFileInput.value = "";
+    editDialog.showModal();
   }
 });
 
@@ -281,6 +294,41 @@ confirmDeleteBtn.addEventListener("click", async () => {
   confirmDialog.close();
 });
 
+cancelEditBtn.addEventListener("click", () => {
+  pendingEditId = null;
+  editDialog.close();
+});
+
+editForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!pendingEditId) return;
+
+  let imageUrl = "";
+  const file = editImageFileInput.files && editImageFileInput.files[0];
+  if (file) {
+    try {
+      imageUrl = await uploadImage(file);
+    } catch (error) {
+      setStatus(error.message || "Error al subir imagen.");
+      return;
+    }
+  } else {
+    const current = records.find((item) => item.id === pendingEditId);
+    imageUrl = current ? current.image : "";
+  }
+
+  await updateRecord(pendingEditId, {
+    album: editForm.album.value,
+    artist: editForm.artist.value,
+    year: editForm.year.value,
+    status: editForm.status.value,
+    image: imageUrl,
+  });
+
+  pendingEditId = null;
+  editDialog.close();
+});
+
 imageFileInput.addEventListener("change", () => {
   const file = imageFileInput.files && imageFileInput.files[0];
   if (!file) {
@@ -290,6 +338,15 @@ imageFileInput.addEventListener("change", () => {
   }
   previewImg.src = URL.createObjectURL(file);
   imagePreview.hidden = false;
+});
+
+editImageFileInput.addEventListener("change", () => {
+  const file = editImageFileInput.files && editImageFileInput.files[0];
+  if (!file) {
+    return;
+  }
+  editPreviewImg.src = URL.createObjectURL(file);
+  editImagePreview.hidden = false;
 });
 
 netlifyIdentity.init();

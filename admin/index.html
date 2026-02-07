@@ -96,6 +96,43 @@
       </div>
     </dialog>
 
+    <dialog id="editDialog" class="confirm-dialog edit-dialog">
+      <h3>Editar vinil</h3>
+      <form id="editForm" class="form-grid">
+        <label>
+          Album
+          <input name="album" type="text" required />
+        </label>
+        <label>
+          Artista
+          <input name="artist" type="text" required />
+        </label>
+        <label>
+          Año
+          <input name="year" type="number" />
+        </label>
+        <label>
+          Status
+          <select name="status">
+            <option value="">Selecciona</option>
+            <option value="Lo tengo">Lo tengo</option>
+            <option value="Wishlist">Wishlist</option>
+          </select>
+        </label>
+        <label class="full">
+          Imagen (reemplazar)
+          <input name="imageFile" id="editImageFile" type="file" accept="image/*" capture="environment" />
+        </label>
+        <div id="editImagePreview" class="image-preview full" hidden>
+          <img id="editPreviewImg" alt="Vista previa" />
+        </div>
+        <div class="dialog-actions full">
+          <button type="button" id="cancelEdit" class="ghost-btn">Cancelar</button>
+          <button type="submit" class="primary-btn">Guardar cambios</button>
+        </div>
+      </form>
+    </dialog>
+
     <script src="admin.js"></script>
   </body>
 </html>
