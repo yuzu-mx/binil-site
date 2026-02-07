@@ -167,7 +167,7 @@ async function deleteRecord(id) {
 }
 
 loginBtn.addEventListener("click", () => {
-  netlifyIdentity.open("login");
+  netlifyIdentity.open("login", { loginMethod: "google" });
 });
 
 logoutBtn.addEventListener("click", () => {
