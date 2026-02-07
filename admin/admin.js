@@ -18,6 +18,10 @@ const cancelEditBtn = document.getElementById("cancelEdit");
 const editImageFileInput = document.getElementById("editImageFile");
 const editImagePreview = document.getElementById("editImagePreview");
 const editPreviewImg = document.getElementById("editPreviewImg");
+const userMenu = document.getElementById("userMenu");
+const userChip = document.getElementById("userChip");
+const userEmail = document.getElementById("userEmail");
+const logoutBtnMini = document.getElementById("logoutBtnMini");
 
 let records = [];
 let pendingDeleteId = null;
@@ -30,10 +34,16 @@ function setStatus(text) {
   statusMessage.textContent = text;
 }
 
+function setLocked(locked) {
+  document.body.classList.toggle("admin-locked", locked);
+}
+
 function showAdmin(show) {
   adminPanel.hidden = !show;
   logoutBtn.hidden = !show;
   loginBtn.hidden = show;
+  userMenu.hidden = !show;
+  setLocked(!show);
 }
 
 async function checkAccess() {
@@ -41,6 +51,7 @@ async function checkAccess() {
   if (!user) {
     showAdmin(false);
     setStatus("Conecta tu cuenta para continuar.");
+    netlifyIdentity.open("login", { loginMethod: "google" });
     return false;
   }
 
@@ -57,12 +68,14 @@ async function checkAccess() {
     showAdmin(false);
     setStatus("Tu correo no tiene acceso. Contacta al administrador.");
     netlifyIdentity.logout();
-    window.location.href = "/admin/no-access.html";
+    window.location.replace("/admin/no-access.html");
     return false;
   }
 
   showAdmin(true);
   setStatus(`Conectado como ${data.email}`);
+  userEmail.textContent = data.email;
+  userChip.textContent = data.email.slice(0, 2).toUpperCase();
   await loadRecords(token);
   return true;
 }
@@ -221,6 +234,10 @@ logoutBtn.addEventListener("click", () => {
   netlifyIdentity.logout();
 });
 
+logoutBtnMini.addEventListener("click", () => {
+  netlifyIdentity.logout();
+});
+
 netlifyIdentity.on("login", async () => {
   netlifyIdentity.close();
   await checkAccess();
@@ -229,6 +246,7 @@ netlifyIdentity.on("login", async () => {
 netlifyIdentity.on("logout", () => {
   showAdmin(false);
   setStatus("Sesión cerrada.");
+  setLocked(true);
 });
 
 createForm.addEventListener("submit", async (event) => {
@@ -349,6 +367,7 @@ editImageFileInput.addEventListener("change", () => {
 });
 
 netlifyIdentity.init();
+setLocked(true);
 checkAccess();
 
 const params = new URLSearchParams(window.location.search);

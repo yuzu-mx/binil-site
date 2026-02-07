@@ -61,6 +61,8 @@ h3 {
 .admin-actions {
   display: flex;
   gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .google-btn {
@@ -181,7 +183,7 @@ h3 {
 .form-grid select {
   border-radius: 18px;
   padding: 14px 16px;
-  border: 2px solid rgba(34, 45, 0, 0.18);
+  border: 2px solid rgba(34, 45, 0, 0.25);
   background: #fffaf0;
   font-size: 1rem;
   box-shadow: inset 0 0 0 1px rgba(34, 45, 0, 0.06);
@@ -267,6 +269,50 @@ h3 {
   max-width: 540px;
 }
 
+.user-menu {
+  position: relative;
+}
+
+.user-chip {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid var(--olive-dark);
+  background: var(--lime);
+  color: var(--olive-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 50px;
+  background: #ffffff;
+  border: 2px solid var(--olive-dark);
+  border-radius: 16px;
+  padding: 12px;
+  display: none;
+  min-width: 220px;
+  box-shadow: 0 14px 24px rgba(20, 16, 8, 0.2);
+  z-index: 5;
+}
+
+.user-dropdown p {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: #5a5843;
+}
+
+.user-menu:hover .user-dropdown {
+  display: block;
+}
+
+body.admin-locked .admin-panel {
+  display: none;
+}
+
 .netlify-identity-widget .form,
 .netlify-identity-widget .login,
 .netlify-identity-widget .password,
@@ -274,14 +320,6 @@ h3 {
 .netlify-identity-widget .forgot-password,
 .netlify-identity-widget .separator {
   display: none !important;
-}
-
-.netlify-identity-widget {
-  pointer-events: none;
-}
-
-.netlify-identity-widget.open {
-  pointer-events: auto;
 }
 
 @media (max-width: 720px) {
