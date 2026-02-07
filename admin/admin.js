@@ -24,6 +24,7 @@ const userEmail = document.getElementById("userEmail");
 const logoutBtnMini = document.getElementById("logoutBtnMini");
 const saveBtn = document.getElementById("saveBtn");
 const toast = document.getElementById("toast");
+const userDropdown = userMenu ? userMenu.querySelector(".user-dropdown") : null;
 
 let toastTimer = null;
 
@@ -59,6 +60,7 @@ function showAdmin(show) {
   loginBtn.hidden = show;
   userMenu.hidden = !show;
   setLocked(!show);
+  document.body.classList.toggle("admin-auth", show);
 }
 
 async function checkAccess(identity) {
@@ -124,6 +126,7 @@ async function checkAccess(identity) {
   setStatus(`Conectado como ${data.email}`);
   userEmail.textContent = data.email;
   userChip.textContent = data.email.slice(0, 2).toUpperCase();
+  loginBtn.hidden = true;
   await loadRecords(token);
   sessionStorage.removeItem("binil_login_prompted");
   if (window.location.search.includes("login=1")) {
@@ -317,6 +320,7 @@ function setupIdentity(identity) {
   identity.on("login", async (user) => {
     identity.close();
     setUserBadge(user);
+    loginBtn.hidden = true;
     setTimeout(() => {
       const current = identity.currentUser();
       if (!current) {
@@ -333,10 +337,12 @@ function setupIdentity(identity) {
     showAdmin(false);
     setStatus("Sesión cerrada.");
     setLocked(true);
+    loginBtn.hidden = false;
   });
 
   identity.on("init", async (user) => {
     setUserBadge(user);
+    loginBtn.hidden = Boolean(user);
     await checkAccess(identity);
 
     const params = new URLSearchParams(window.location.search);
@@ -348,6 +354,19 @@ function setupIdentity(identity) {
   });
 
   identity.init();
+}
+
+if (userChip && userDropdown) {
+  userChip.addEventListener("click", (event) => {
+    event.stopPropagation();
+    userDropdown.classList.toggle("show");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!userMenu.contains(event.target)) {
+      userDropdown.classList.remove("show");
+    }
+  });
 }
 
 createForm.addEventListener("submit", async (event) => {

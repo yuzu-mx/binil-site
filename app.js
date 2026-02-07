@@ -156,6 +156,7 @@ async function fetchRecords() {
 
 searchBtn.addEventListener("click", () => {
   updateResults(searchInput.value.trim());
+  document.getElementById("allRecords").scrollIntoView({ behavior: "smooth" });
 });
 
 searchInput.addEventListener("input", (event) => {
