@@ -90,6 +90,8 @@ function updateAllRecords() {
     const artistOk = !artistFilter.value || item.artist === artistFilter.value;
     return statusOk && artistOk;
   });
+  const filtersActive = Boolean(statusFilter.value || artistFilter.value);
+  resetFiltersBtn.hidden = !filtersActive;
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   currentPage = Math.min(currentPage, totalPages);

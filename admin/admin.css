@@ -25,6 +25,7 @@ body {
   background: radial-gradient(circle at top left, #fbf3d9 0%, #f7f0dd 45%, #e7e1cc 100%);
   color: var(--ink);
   min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
 }
 
 .admin-shell {
@@ -324,6 +325,9 @@ h3 {
 
 .edit-dialog {
   max-width: 540px;
+  width: min(92vw, 540px);
+  max-height: 90vh;
+  overflow: auto;
 }
 
 .user-menu {
@@ -400,7 +404,14 @@ body.admin-locked .admin-panel {
   .form-grid input,
   .form-grid select {
     padding: 12px 12px;
-    font-size: 0.95rem;
+    font-size: 16px;
+  }
+
+  .confirm-dialog,
+  .edit-dialog {
+    width: min(92vw, 520px);
+    max-height: 85vh;
+    padding: 16px;
   }
 
   .admin-actions {
