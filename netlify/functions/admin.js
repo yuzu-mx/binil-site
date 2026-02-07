@@ -124,9 +124,6 @@ async function createRecord(payload) {
   if (payload.gift) {
     fields.Gift = payload.gift;
   }
-  if (payload.gender) {
-    fields.Gender = payload.gender;
-  }
 
   if (payload.image) {
     fields.Images = [{ url: payload.image }];
@@ -168,9 +165,6 @@ async function updateRecord(payload) {
   }
   if (payload.gift) {
     fields.Gift = payload.gift;
-  }
-  if (payload.gender) {
-    fields.Gender = payload.gender;
   }
 
   if (payload.image) {
