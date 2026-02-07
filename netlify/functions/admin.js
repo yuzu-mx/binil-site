@@ -1,6 +1,26 @@
-function getUser(context) {
+function getUserFromContext(context) {
   const user = context.clientContext && context.clientContext.user;
   return user || null;
+}
+
+async function getUserFromIdentity(request) {
+  const auth = request.headers.get("authorization") || "";
+  if (!auth.toLowerCase().startsWith("bearer ")) return null;
+
+  const siteUrl = process.env.URL || process.env.DEPLOY_PRIME_URL;
+  if (!siteUrl) return null;
+
+  try {
+    const response = await fetch(`${siteUrl}/.netlify/identity/user`, {
+      headers: {
+        Authorization: auth,
+      },
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
+    return null;
+  }
 }
 
 function jsonResponse(body, status = 200) {
@@ -163,7 +183,11 @@ async function deleteRecord(payload) {
 }
 
 export default async (request, context) => {
-  const user = getUser(context);
+  let user = getUserFromContext(context);
+  if (!user || !user.email) {
+    user = await getUserFromIdentity(request);
+  }
+
   if (!user || !user.email) {
     return jsonResponse({ error: "No autorizado" }, 401);
   }

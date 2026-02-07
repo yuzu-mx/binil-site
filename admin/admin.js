@@ -60,7 +60,16 @@ async function checkAccess(identity) {
   }
 
   setStatus("Validando acceso...");
-  const token = user.token?.access_token || (await user.jwt());
+  let token = "";
+  try {
+    token = await user.jwt();
+  } catch (error) {
+    token = user.token?.access_token || "";
+  }
+  if (!token) {
+    setStatus("No se pudo obtener el token de sesión.");
+    return false;
+  }
   let response;
   let data = {};
   try {
