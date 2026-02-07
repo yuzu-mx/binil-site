@@ -269,27 +269,14 @@ function setupIdentity(identity) {
   identity.on("init", async (user) => {
     setUserBadge(user);
     await checkAccess(identity);
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("login") === "1" && !user) {
+      identity.open("login", { loginMethod: "google" });
+    }
   });
 
   identity.init();
-
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("login") === "1") {
-    identity.open("login", { loginMethod: "google" });
-  }
-
-  // Fallback: wait for identity to populate user
-  let attempts = 0;
-  const poll = setInterval(async () => {
-    const user = identity.currentUser();
-    if (user) {
-      setUserBadge(user);
-      await checkAccess(identity);
-      clearInterval(poll);
-    }
-    attempts += 1;
-    if (attempts > 10) clearInterval(poll);
-  }, 500);
 }
 
 createForm.addEventListener("submit", async (event) => {
