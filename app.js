@@ -103,8 +103,10 @@ function updateAllRecords() {
   allCount.textContent = `${filtered.length} registros`;
   pageInfo.textContent = `${currentPage} de ${totalPages}`;
 
-  prevPageBtn.disabled = currentPage === 1;
-  nextPageBtn.disabled = currentPage === totalPages;
+  const hasPrev = currentPage > 1;
+  const hasNext = currentPage < totalPages;
+  prevPageBtn.hidden = !hasPrev;
+  nextPageBtn.hidden = !hasNext;
 }
 
 function populateFilters() {
@@ -177,11 +179,13 @@ showAllBtn.addEventListener("click", () => {
 prevPageBtn.addEventListener("click", () => {
   currentPage -= 1;
   updateAllRecords();
+  document.getElementById("allRecords").scrollIntoView({ behavior: "smooth" });
 });
 
 nextPageBtn.addEventListener("click", () => {
   currentPage += 1;
   updateAllRecords();
+  document.getElementById("allRecords").scrollIntoView({ behavior: "smooth" });
 });
 
 statusFilter.addEventListener("change", () => {
