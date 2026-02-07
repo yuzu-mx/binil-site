@@ -77,11 +77,21 @@ async function checkAccess(identity) {
 
   if (!response.ok || !data.allowed) {
     showAdmin(false);
-    setStatus(data.error || "Tu correo no tiene acceso. Contacta al administrador.");
-    identity.logout();
+    const errorMessage = data.error || "No se pudo validar el acceso.";
+    setStatus(errorMessage);
+
     if (response.status === 403) {
+      identity.logout();
       window.location.replace("/admin/no-access.html");
+      return false;
     }
+
+    if (response.status === 401) {
+      identity.logout();
+      return false;
+    }
+
+    // For 500 or other errors, keep session and show message
     return false;
   }
 
