@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Binil Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Figtree:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  </head>
+  <body>
+    <div class="admin-shell">
+      <header class="admin-header">
+        <div>
+          <p class="admin-kicker">Binil</p>
+          <h1>Panel de administración</h1>
+        </div>
+        <div class="admin-actions">
+          <button id="loginBtn" class="primary-btn">Iniciar sesión</button>
+          <button id="logoutBtn" class="ghost-btn" hidden>Cerrar sesión</button>
+        </div>
+      </header>
+
+      <section id="statusPanel" class="status-panel">
+        <p id="statusMessage">Conecta tu cuenta para continuar.</p>
+      </section>
+
+      <section id="adminPanel" class="admin-panel" hidden>
+        <div class="card">
+          <h2>Nuevo vinil</h2>
+          <form id="createForm" class="form-grid">
+            <label>
+              Album
+              <input name="album" type="text" placeholder="Nombre del álbum" required />
+            </label>
+            <label>
+              Artista
+              <input name="artist" type="text" placeholder="Nombre del artista" required />
+            </label>
+            <label>
+              Año
+              <input name="year" type="number" placeholder="1999" />
+            </label>
+            <label>
+              Status
+              <select name="status">
+                <option value="">Selecciona</option>
+                <option value="Lo tengo">Lo tengo</option>
+                <option value="Wishlist">Wishlist</option>
+              </select>
+            </label>
+            <label class="full">
+              Imagen (URL)
+              <input name="image" type="url" placeholder="https://..." />
+            </label>
+            <button class="primary-btn full" type="submit">Guardar vinil</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>Viniles existentes</h2>
+            <button id="refreshBtn" class="ghost-btn">Actualizar</button>
+          </div>
+          <div id="recordsList" class="records-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <dialog id="confirmDialog" class="confirm-dialog">
+      <h3>¿Eliminar vinil?</h3>
+      <p>Esta acción no se puede deshacer.</p>
+      <div class="dialog-actions">
+        <button id="cancelDelete" class="ghost-btn">Cancelar</button>
+        <button id="confirmDelete" class="primary-btn danger">Eliminar</button>
+      </div>
+    </dialog>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
