@@ -75,6 +75,12 @@ body {
   flex-wrap: wrap;
 }
 
+.header-admin,
+.header-all {
+  display: flex;
+  align-items: center;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -364,6 +370,11 @@ h1 {
     display: contents;
   }
 
+  .header-actions .header-admin {
+    grid-area: admin;
+    justify-self: end;
+  }
+
   .header-actions .admin-link {
     grid-area: admin;
     justify-self: end;
@@ -372,8 +383,12 @@ h1 {
     letter-spacing: 0.04em;
   }
 
-  .header-actions .primary-btn {
+  .header-actions .header-all {
     grid-area: verTodos;
+    width: 100%;
+  }
+
+  .header-actions .header-all .primary-btn {
     width: 100%;
   }
 }

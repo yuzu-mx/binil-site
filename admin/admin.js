@@ -271,6 +271,11 @@ function setupIdentity(identity) {
     identity.close();
     setUserBadge(user);
     setTimeout(() => {
+      const current = identity.currentUser();
+      if (!current) {
+        setStatus("No se pudo completar el login. Revisa que tu usuario esté invitado en Netlify Identity.");
+        return;
+      }
       checkAccess(identity);
     }, 300);
   });
