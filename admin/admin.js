@@ -61,18 +61,27 @@ async function checkAccess(identity) {
 
   setStatus("Validando acceso...");
   const token = await user.jwt(true);
-  const response = await fetch("/.netlify/functions/admin", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await response.json();
+  let response;
+  let data = {};
+  try {
+    response = await fetch("/.netlify/functions/admin", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    data = await response.json();
+  } catch (error) {
+    setStatus("Error de red al validar acceso.");
+    return false;
+  }
 
   if (!response.ok || !data.allowed) {
     showAdmin(false);
-    setStatus("Tu correo no tiene acceso. Contacta al administrador.");
+    setStatus(data.error || "Tu correo no tiene acceso. Contacta al administrador.");
     identity.logout();
-    window.location.replace("/admin/no-access.html");
+    if (response.status === 403) {
+      window.location.replace("/admin/no-access.html");
+    }
     return false;
   }
 
@@ -261,7 +270,9 @@ function setupIdentity(identity) {
   identity.on("login", async (user) => {
     identity.close();
     setUserBadge(user);
-    await checkAccess(identity);
+    setTimeout(() => {
+      checkAccess(identity);
+    }, 300);
   });
 
   identity.on("logout", () => {
