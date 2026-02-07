@@ -224,6 +224,29 @@ h1 {
   gap: 18px;
 }
 
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.filters label {
+  display: grid;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #5a5843;
+}
+
+.filters select {
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(34, 45, 0, 0.15);
+  background: #fffdf6;
+  font-size: 0.95rem;
+}
+
 .card {
   background: rgba(255, 255, 255, 0.9);
   border-radius: var(--radius-md);
@@ -232,6 +255,8 @@ h1 {
   display: grid;
   gap: 12px;
   min-height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: cardIn 0.4s ease both;
 }
 
 .card img {
@@ -240,6 +265,22 @@ h1 {
   object-fit: cover;
   border-radius: 14px;
   box-shadow: 0 10px 20px rgba(20, 18, 8, 0.2);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 45px rgba(28, 24, 12, 0.18);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .card h3 {
@@ -298,5 +339,10 @@ h1 {
 
   .primary-btn {
     width: 100%;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

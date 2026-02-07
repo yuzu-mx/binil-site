@@ -10,6 +10,9 @@ const allCount = document.getElementById("allCount");
 const prevPageBtn = document.getElementById("prevPage");
 const nextPageBtn = document.getElementById("nextPage");
 const pageInfo = document.getElementById("pageInfo");
+const statusFilter = document.getElementById("statusFilter");
+const artistFilter = document.getElementById("artistFilter");
+const resetFiltersBtn = document.getElementById("resetFilters");
 
 let records = [];
 let fuse = null;
@@ -79,18 +82,45 @@ function updateResults(query) {
 }
 
 function updateAllRecords() {
-  const totalPages = Math.max(1, Math.ceil(records.length / PAGE_SIZE));
+  const filtered = records.filter((item) => {
+    const statusOk = !statusFilter.value || item.status === statusFilter.value;
+    const artistOk = !artistFilter.value || item.artist === artistFilter.value;
+    return statusOk && artistOk;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   currentPage = Math.min(currentPage, totalPages);
 
   const start = (currentPage - 1) * PAGE_SIZE;
-  const pageItems = records.slice(start, start + PAGE_SIZE);
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
   renderCards(allGrid, pageItems);
-  allCount.textContent = `${records.length} registros`;
+  allCount.textContent = `${filtered.length} registros`;
   pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
 
   prevPageBtn.disabled = currentPage === 1;
   nextPageBtn.disabled = currentPage === totalPages;
+}
+
+function populateFilters() {
+  const statuses = Array.from(new Set(records.map((r) => r.status).filter(Boolean))).sort();
+  const artists = Array.from(new Set(records.map((r) => r.artist).filter(Boolean))).sort();
+
+  statusFilter.innerHTML = "<option value=\"\">Todos</option>";
+  statuses.forEach((status) => {
+    const option = document.createElement("option");
+    option.value = status;
+    option.textContent = status;
+    statusFilter.appendChild(option);
+  });
+
+  artistFilter.innerHTML = "<option value=\"\">Todos</option>";
+  artists.forEach((artist) => {
+    const option = document.createElement("option");
+    option.value = artist;
+    option.textContent = artist;
+    artistFilter.appendChild(option);
+  });
 }
 
 async function fetchRecords() {
@@ -110,6 +140,7 @@ async function fetchRecords() {
       minMatchCharLength: 2,
     });
 
+    populateFilters();
     updateAllRecords();
     setStatus("Listo");
   } catch (error) {
@@ -142,6 +173,23 @@ prevPageBtn.addEventListener("click", () => {
 
 nextPageBtn.addEventListener("click", () => {
   currentPage += 1;
+  updateAllRecords();
+});
+
+statusFilter.addEventListener("change", () => {
+  currentPage = 1;
+  updateAllRecords();
+});
+
+artistFilter.addEventListener("change", () => {
+  currentPage = 1;
+  updateAllRecords();
+});
+
+resetFiltersBtn.addEventListener("click", () => {
+  statusFilter.value = "";
+  artistFilter.value = "";
+  currentPage = 1;
   updateAllRecords();
 });
 

@@ -66,6 +66,21 @@
           <h2>Todos los vinilos</h2>
           <p id="allCount">0 registros</p>
         </div>
+        <div class="filters">
+          <label>
+            Estado
+            <select id="statusFilter">
+              <option value="">Todos</option>
+            </select>
+          </label>
+          <label>
+            Artista
+            <select id="artistFilter">
+              <option value="">Todos</option>
+            </select>
+          </label>
+          <button id="resetFilters" class="ghost-btn">Limpiar filtros</button>
+        </div>
         <div id="allGrid" class="results-grid"></div>
         <div class="pagination">
           <button id="prevPage" class="ghost-btn">Anterior</button>
