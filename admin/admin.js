@@ -40,7 +40,7 @@ function setLocked(locked) {
 
 function showAdmin(show) {
   adminPanel.hidden = !show;
-  logoutBtn.hidden = !show;
+  logoutBtn.hidden = true;
   loginBtn.hidden = show;
   userMenu.hidden = !show;
   setLocked(!show);
@@ -187,7 +187,8 @@ async function createRecord(formData) {
   });
 
   if (!response.ok) {
-    setStatus("No se pudo guardar el vinil.");
+    const errorData = await response.json().catch(() => ({}));
+    setStatus(errorData.error || "No se pudo guardar el vinil.");
     return;
   }
 
@@ -210,7 +211,8 @@ async function updateRecord(id, payload) {
   });
 
   if (!response.ok) {
-    setStatus("No se pudo actualizar.");
+    const errorData = await response.json().catch(() => ({}));
+    setStatus(errorData.error || "No se pudo actualizar.");
     return;
   }
 
@@ -232,7 +234,8 @@ async function deleteRecord(id) {
   });
 
   if (!response.ok) {
-    setStatus("No se pudo eliminar.");
+    const errorData = await response.json().catch(() => ({}));
+    setStatus(errorData.error || "No se pudo eliminar.");
     return;
   }
 

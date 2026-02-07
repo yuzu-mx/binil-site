@@ -104,9 +104,15 @@ async function createRecord(payload) {
   const fields = {
     "Album Name": payload.album || "",
     Artist: payload.artist || "",
-    "Album Year": payload.year ? Number(payload.year) : null,
-    Status: payload.status || "",
   };
+
+  if (payload.year) {
+    fields["Album Year"] = Number(payload.year);
+  }
+
+  if (payload.status) {
+    fields.Status = payload.status;
+  }
 
   if (payload.image) {
     fields.Images = [{ url: payload.image }];
@@ -137,9 +143,15 @@ async function updateRecord(payload) {
   const fields = {
     "Album Name": payload.album || "",
     Artist: payload.artist || "",
-    "Album Year": payload.year ? Number(payload.year) : null,
-    Status: payload.status || "",
   };
+
+  if (payload.year) {
+    fields["Album Year"] = Number(payload.year);
+  }
+
+  if (payload.status) {
+    fields.Status = payload.status;
+  }
 
   if (payload.image) {
     fields.Images = [{ url: payload.image }];
