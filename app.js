@@ -1,5 +1,6 @@
 const searchInput = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
+const clearSearchBtn = document.getElementById("clearSearchBtn");
 const resultsGrid = document.getElementById("resultsGrid");
 const resultsCount = document.getElementById("resultsCount");
 const showAllBtn = document.getElementById("showAllBtn");
@@ -69,8 +70,10 @@ function updateResults(query) {
   if (!query) {
     resultsGrid.innerHTML = "";
     resultsCount.textContent = "0 resultados";
+    clearSearchBtn.classList.remove("visible");
     return;
   }
+  clearSearchBtn.classList.add("visible");
   const matches = fuse.search(query).map((result) => result.item);
   renderCards(resultsGrid, matches);
   resultsCount.textContent = `${matches.length} resultados`;
@@ -149,6 +152,12 @@ searchBtn.addEventListener("click", () => {
 
 searchInput.addEventListener("input", (event) => {
   updateResults(event.target.value.trim());
+});
+
+clearSearchBtn.addEventListener("click", () => {
+  searchInput.value = "";
+  updateResults("");
+  searchInput.focus();
 });
 
 

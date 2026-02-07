@@ -44,10 +44,10 @@ body {
 
 .admin-actions {
   background: rgba(255, 255, 255, 0.6);
-  padding: 10px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(34, 45, 0, 0.12);
-  box-shadow: 0 10px 18px rgba(20, 16, 8, 0.12);
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
 }
 
 .admin-kicker {
@@ -78,21 +78,20 @@ h3 {
   align-items: center;
   gap: 10px;
   border: 2px solid var(--olive-dark);
-  background: #f3edc8;
+  background: transparent;
   color: var(--olive-dark);
-  padding: 10px 18px;
+  padding: 8px 14px;
   border-radius: 999px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(30, 30, 30, 0.12);
+  box-shadow: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .google-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 22px rgba(30, 30, 30, 0.18);
   background: var(--olive-dark);
   color: var(--lime);
 }
@@ -115,7 +114,7 @@ h3 {
   border: 2px solid var(--olive-dark);
   background: var(--lime);
   color: var(--olive-dark);
-  padding: 12px 22px;
+  padding: 12px 20px;
   border-radius: 999px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -139,7 +138,7 @@ h3 {
 }
 
 .primary-btn.loading .btn-text {
-  opacity: 0.7;
+  display: none;
 }
 
 .primary-btn.loading {
@@ -165,7 +164,7 @@ h3 {
 .ghost-btn {
   border: 2px solid var(--olive-dark);
   background: transparent;
-  padding: 10px 18px;
+  padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;
   font-weight: 600;
@@ -181,6 +180,27 @@ h3 {
   padding: 16px 20px;
   margin-bottom: 24px;
   box-shadow: 0 12px 26px rgba(40, 35, 20, 0.12);
+}
+
+.toast {
+  position: sticky;
+  top: 10px;
+  z-index: 10;
+  background: #f3edc8;
+  border: 2px solid var(--olive-dark);
+  color: var(--olive-dark);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 0 14px;
+  box-shadow: 0 10px 18px rgba(20, 16, 8, 0.12);
+}
+
+.toast.error {
+  background: #ffe7e3;
+  border-color: #b33b2c;
+  color: #5a231b;
 }
 
 .admin-panel {
@@ -310,15 +330,23 @@ h3 {
 }
 
 .user-chip {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid var(--olive-dark);
-  background: #f3edc8;
+  background: transparent;
   color: var(--olive-dark);
   font-weight: 600;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.user-badge {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5a5843;
+  margin-top: 6px;
 }
 
 .user-dropdown {
@@ -360,13 +388,12 @@ body.admin-locked .admin-panel {
 
 @media (max-width: 720px) {
   .admin-shell {
-    padding: 22px 14px 50px;
+    padding: 18px 12px 46px;
   }
 
   .admin-actions {
     width: 100%;
     justify-content: space-between;
-    padding: 8px;
     gap: 8px;
   }
 
@@ -374,8 +401,9 @@ body.admin-locked .admin-panel {
   .admin-actions .google-btn {
     flex: 1 1 auto;
     justify-content: center;
-    font-size: 0.7rem;
-    padding: 8px 12px;
+    font-size: 0.68rem;
+    padding: 8px 10px;
+    white-space: nowrap;
   }
 
   .user-menu {

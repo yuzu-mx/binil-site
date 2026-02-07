@@ -23,6 +23,9 @@ const userChip = document.getElementById("userChip");
 const userEmail = document.getElementById("userEmail");
 const logoutBtnMini = document.getElementById("logoutBtnMini");
 const saveBtn = document.getElementById("saveBtn");
+const toast = document.getElementById("toast");
+
+let toastTimer = null;
 
 let records = [];
 let pendingDeleteId = null;
@@ -33,6 +36,17 @@ const CLOUDINARY_UPLOAD_PRESET = "binil_unsigned";
 
 function setStatus(text) {
   statusMessage.textContent = text;
+}
+
+function showToast(message, type = "success") {
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.toggle("error", type === "error");
+  toast.hidden = false;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.hidden = true;
+  }, 4000);
 }
 
 function setLocked(locked) {
@@ -190,12 +204,17 @@ async function createRecord(formData) {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     setStatus(errorData.error || "No se pudo guardar el vinil.");
+    showToast(errorData.error || "Error al guardar.", "error");
     return;
   }
 
   createForm.reset();
+  imageFileInput.value = "";
+  imagePreview.hidden = true;
+  previewImg.src = "";
   await loadRecords(token);
   setStatus("Vinil guardado.");
+  showToast("Se guardó exitosamente.");
 }
 
 async function updateRecord(id, payload) {
@@ -214,11 +233,13 @@ async function updateRecord(id, payload) {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     setStatus(errorData.error || "No se pudo actualizar.");
+    showToast(errorData.error || "Error al actualizar.", "error");
     return;
   }
 
   await loadRecords(token);
   setStatus("Registro actualizado.");
+  showToast("Se guardó exitosamente.");
 }
 
 async function deleteRecord(id) {
@@ -237,11 +258,13 @@ async function deleteRecord(id) {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     setStatus(errorData.error || "No se pudo eliminar.");
+    showToast(errorData.error || "Error al eliminar.", "error");
     return;
   }
 
   await loadRecords(token);
   setStatus("Registro eliminado.");
+  showToast("Eliminado correctamente.");
 }
 
 async function uploadImage(file) {
@@ -335,6 +358,7 @@ createForm.addEventListener("submit", async (event) => {
     await createRecord(formData);
   } catch (error) {
     setStatus(error.message || "Error al guardar.");
+    showToast(error.message || "Error al guardar.", "error");
   } finally {
     if (saveBtn) saveBtn.classList.remove("loading");
   }
