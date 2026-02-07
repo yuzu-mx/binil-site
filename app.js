@@ -1,7 +1,5 @@
 const searchInput = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
-const clearBtn = document.getElementById("clearBtn");
-const statusPill = document.getElementById("statusPill");
 const resultsGrid = document.getElementById("resultsGrid");
 const resultsCount = document.getElementById("resultsCount");
 const showAllBtn = document.getElementById("showAllBtn");
@@ -28,9 +26,6 @@ const fallbackCover =
     </svg>`
   );
 
-function setStatus(text) {
-  statusPill.textContent = text;
-}
 
 function formatRecord(record) {
   return {
@@ -124,7 +119,7 @@ function populateFilters() {
 }
 
 async function fetchRecords() {
-  setStatus("Cargando...");
+  // no status pill
   try {
     const response = await fetch("/.netlify/functions/airtable");
     const data = await response.json();
@@ -142,10 +137,9 @@ async function fetchRecords() {
 
     populateFilters();
     updateAllRecords();
-    setStatus("Listo");
+    // loaded
   } catch (error) {
     console.error(error);
-    setStatus("Error al cargar");
   }
 }
 
@@ -157,10 +151,6 @@ searchInput.addEventListener("input", (event) => {
   updateResults(event.target.value.trim());
 });
 
-clearBtn.addEventListener("click", () => {
-  searchInput.value = "";
-  updateResults("");
-});
 
 showAllBtn.addEventListener("click", () => {
   document.getElementById("allRecords").scrollIntoView({ behavior: "smooth" });
