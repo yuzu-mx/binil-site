@@ -46,12 +46,16 @@ function showAdmin(show) {
   setLocked(!show);
 }
 
-async function checkAccess() {
-  const user = netlifyIdentity.currentUser();
+async function checkAccess(identity) {
+  if (!identity) {
+    setStatus("No se pudo cargar el login. Recarga la página.");
+    return false;
+  }
+
+  const user = identity.currentUser();
   if (!user) {
     showAdmin(false);
     setStatus("Conecta tu cuenta para continuar.");
-    netlifyIdentity.open("login", { loginMethod: "google" });
     return false;
   }
 
@@ -67,7 +71,7 @@ async function checkAccess() {
   if (!response.ok || !data.allowed) {
     showAdmin(false);
     setStatus("Tu correo no tiene acceso. Contacta al administrador.");
-    netlifyIdentity.logout();
+    identity.logout();
     window.location.replace("/admin/no-access.html");
     return false;
   }
@@ -226,28 +230,50 @@ async function uploadImage(file) {
   return data.secure_url;
 }
 
-loginBtn.addEventListener("click", () => {
-  netlifyIdentity.open("login", { loginMethod: "google" });
-});
+function setupIdentity(identity) {
+  if (!identity) {
+    setStatus("No se pudo cargar el login. Recarga la página.");
+    return;
+  }
 
-logoutBtn.addEventListener("click", () => {
-  netlifyIdentity.logout();
-});
+  loginBtn.addEventListener("click", () => {
+    identity.open("login", { loginMethod: "google" });
+  });
 
-logoutBtnMini.addEventListener("click", () => {
-  netlifyIdentity.logout();
-});
+  logoutBtn.addEventListener("click", () => {
+    identity.logout();
+  });
 
-netlifyIdentity.on("login", async () => {
-  netlifyIdentity.close();
-  await checkAccess();
-});
+  logoutBtnMini.addEventListener("click", () => {
+    identity.logout();
+  });
 
-netlifyIdentity.on("logout", () => {
-  showAdmin(false);
-  setStatus("Sesión cerrada.");
-  setLocked(true);
-});
+  identity.on("login", async () => {
+    identity.close();
+    await checkAccess(identity);
+  });
+
+  identity.on("logout", () => {
+    showAdmin(false);
+    setStatus("Sesión cerrada.");
+    setLocked(true);
+  });
+
+  identity.on("init", async (user) => {
+    if (user && user.email) {
+      userEmail.textContent = user.email;
+      userChip.textContent = user.email.slice(0, 2).toUpperCase();
+    }
+    await checkAccess(identity);
+  });
+
+  identity.init();
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("login") === "1") {
+    identity.open("login", { loginMethod: "google" });
+  }
+}
 
 createForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -366,11 +392,9 @@ editImageFileInput.addEventListener("change", () => {
   editImagePreview.hidden = false;
 });
 
-netlifyIdentity.init();
 setLocked(true);
-checkAccess();
 
-const params = new URLSearchParams(window.location.search);
-if (params.get("login") === "1") {
-  netlifyIdentity.open("login", { loginMethod: "google" });
-}
+window.addEventListener("load", () => {
+  const identity = window.netlifyIdentity || null;
+  setupIdentity(identity);
+});
