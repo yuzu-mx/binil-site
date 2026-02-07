@@ -81,6 +81,10 @@ async function checkAccess(identity) {
   userEmail.textContent = data.email;
   userChip.textContent = data.email.slice(0, 2).toUpperCase();
   await loadRecords(token);
+  sessionStorage.removeItem("binil_login_prompted");
+  if (window.location.search.includes("login=1")) {
+    history.replaceState({}, "", "/admin");
+  }
   return true;
 }
 
@@ -271,7 +275,9 @@ function setupIdentity(identity) {
     await checkAccess(identity);
 
     const params = new URLSearchParams(window.location.search);
-    if (params.get("login") === "1" && !user) {
+    const prompted = sessionStorage.getItem("binil_login_prompted");
+    if (params.get("login") === "1" && !user && !prompted) {
+      sessionStorage.setItem("binil_login_prompted", "1");
       identity.open("login", { loginMethod: "google" });
     }
   });
