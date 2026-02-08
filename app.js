@@ -52,6 +52,7 @@ function formatRecord(record) {
     status: record.fields["Status"] || "",
     gift: record.fields["Gift"] || "",
     gender: genderValue,
+    rating: record.fields["Rating"] || 0,
     image: thumb || (imageField && imageField.url) || fallbackCover,
   };
 }
@@ -72,20 +73,34 @@ function renderCards(target, items) {
     const card = document.createElement("article");
     const giftLabel = item.gift ? `🎁 ${item.gift}` : "";
     const genderLabel = item.gender ? `✨ ${item.gender}` : "";
+    const rating = Number(item.rating) || 0;
+    const stars = "★★★★★"
+      .split("")
+      .map((star, idx) => (idx < rating ? "★" : "☆"))
+      .join("");
     card.className = "card";
     card.innerHTML = `
       <div class="image-wrap skeleton">
         <img src="${item.image}" alt="${item.album}" loading="lazy" decoding="async" />
       </div>
-      <div>
-        <h3>${item.album}</h3>
-        <p>${item.artist}</p>
-      </div>
-      <div class="meta">
-        ${item.year ? `<span class="chip">${item.year}</span>` : ""}
-        ${statusLabel ? `<span class="chip">${statusLabel}</span>` : ""}
-        ${giftLabel ? `<span class="chip">${giftLabel}</span>` : ""}
-        ${genderLabel ? `<span class="chip">${genderLabel}</span>` : ""}
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <h3>${item.album}</h3>
+            <p>${item.artist}</p>
+          </div>
+          ${
+            rating
+              ? `<div class="rating"><span class="stars">${stars}</span><span class="score">${rating}</span></div>`
+              : ""
+          }
+        </div>
+        <div class="meta">
+          ${item.year ? `<span class="chip">${item.year}</span>` : ""}
+          ${statusLabel ? `<span class="chip">${statusLabel}</span>` : ""}
+          ${giftLabel ? `<span class="chip">${giftLabel}</span>` : ""}
+          ${genderLabel ? `<span class="chip">${genderLabel}</span>` : ""}
+        </div>
       </div>
     `;
     const img = card.querySelector("img");
