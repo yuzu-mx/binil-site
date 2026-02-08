@@ -9,6 +9,9 @@ const allCount = document.getElementById("allCount");
 const prevPageBtn = document.getElementById("prevPage");
 const nextPageBtn = document.getElementById("nextPage");
 const pageInfo = document.getElementById("pageInfo");
+const imageModal = document.getElementById("imageModal");
+const modalImage = document.getElementById("modalImage");
+const closeImageModalBtn = document.getElementById("closeImageModal");
 const statusFilter = document.getElementById("statusFilter");
 const artistFilter = document.getElementById("artistFilter");
 const resetFiltersBtn = document.getElementById("resetFilters");
@@ -80,7 +83,7 @@ function renderCards(target, items) {
       .join("");
     card.className = "card";
     card.innerHTML = `
-      <div class="image-wrap skeleton">
+      <div class="image-wrap skeleton" data-image="${item.image}">
         <img src="${item.image}" alt="${item.album}" loading="lazy" decoding="async" />
       </div>
       <div class="card-body">
@@ -220,6 +223,43 @@ clearSearchBtn.addEventListener("click", () => {
   searchInput.value = "";
   updateResults("");
   searchInput.focus();
+});
+
+function openImageModal(src, alt) {
+  if (!imageModal || !modalImage) return;
+  modalImage.src = src;
+  modalImage.alt = alt || "Vinil";
+  imageModal.hidden = false;
+}
+
+function closeImageModal() {
+  if (!imageModal) return;
+  imageModal.hidden = true;
+  if (modalImage) {
+    modalImage.src = "";
+  }
+}
+
+if (closeImageModalBtn) {
+  closeImageModalBtn.addEventListener("click", closeImageModal);
+}
+
+if (imageModal) {
+  imageModal.addEventListener("click", (event) => {
+    if (event.target.dataset && event.target.dataset.close === "true") {
+      closeImageModal();
+    }
+  });
+}
+
+document.addEventListener("click", (event) => {
+  const wrap = event.target.closest && event.target.closest(".image-wrap");
+  if (!wrap) return;
+  const img = wrap.querySelector("img");
+  const src = wrap.getAttribute("data-image");
+  if (src) {
+    openImageModal(src, img ? img.alt : "Vinil");
+  }
 });
 
 
