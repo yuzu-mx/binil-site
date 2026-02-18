@@ -15,11 +15,13 @@ const closeImageModalBtn = document.getElementById("closeImageModal");
 const statusFilter = document.getElementById("statusFilter");
 const artistFilter = document.getElementById("artistFilter");
 const resetFiltersBtn = document.getElementById("resetFilters");
+const sortToggleBtn = document.getElementById("sortToggle");
 
 let records = [];
 let fuse = null;
 let currentPage = 1;
 const PAGE_SIZE = 20;
+let sortOrder = "desc";
 
 const fallbackCover =
   "data:image/svg+xml;charset=utf-8," +
@@ -56,8 +58,25 @@ function formatRecord(record) {
     gift: record.fields["Gift"] || "",
     gender: genderValue,
     rating: record.fields["Rating"] || 0,
+    createdAt: record.fields["Created At"] || record.createdTime || "",
     image: thumb || (imageField && imageField.url) || fallbackCover,
   };
+}
+
+function formatDateLabel(isoDate) {
+  if (!isoDate) return "";
+  const date = new Date(isoDate);
+  if (Number.isNaN(date.getTime())) return "";
+  const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${day}/${months[date.getMonth()]}/${date.getFullYear()}`;
+}
+
+function compareByCreatedAt(a, b, order = "desc") {
+  const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+  const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+  if (timeA === timeB) return a.artist.localeCompare(b.artist);
+  return order === "asc" ? timeA - timeB : timeB - timeA;
 }
 
 function renderCards(target, items) {
@@ -76,6 +95,7 @@ function renderCards(target, items) {
     const card = document.createElement("article");
     const giftLabel = item.gift ? `🎁 ${item.gift}` : "";
     const genderLabel = item.gender ? `✨ ${item.gender}` : "";
+    const createdLabel = formatDateLabel(item.createdAt);
     const rating = Number(item.rating) || 0;
     const stars = "★★★★★"
       .split("")
@@ -99,6 +119,7 @@ function renderCards(target, items) {
           }
         </div>
         <div class="meta">
+          ${createdLabel ? `<span class="chip">🗓️ ${createdLabel}</span>` : ""}
           ${item.year ? `<span class="chip">${item.year}</span>` : ""}
           ${statusLabel ? `<span class="chip">${statusLabel}</span>` : ""}
           ${giftLabel ? `<span class="chip">${giftLabel}</span>` : ""}
@@ -127,7 +148,7 @@ function updateResults(query) {
   clearSearchBtn.classList.add("visible");
   const matches = fuse.search(query).map((result) => result.item);
   renderCards(resultsGrid, matches);
-  resultsCount.textContent = `${matches.length} resultados`;
+  resultsCount.textContent = `${matches.length} vinilos`;
 }
 
 function updateAllRecords() {
@@ -136,6 +157,7 @@ function updateAllRecords() {
     const artistOk = !artistFilter.value || item.artist === artistFilter.value;
     return statusOk && artistOk;
   });
+  filtered.sort((a, b) => compareByCreatedAt(a, b, sortOrder));
   const filtersActive = Boolean(statusFilter.value || artistFilter.value);
   resetFiltersBtn.hidden = !filtersActive;
 
@@ -146,7 +168,7 @@ function updateAllRecords() {
   const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
   renderCards(allGrid, pageItems);
-  allCount.textContent = `${filtered.length} registros`;
+  allCount.textContent = `${filtered.length} vinilos`;
   pageInfo.textContent = `${currentPage} de ${totalPages}`;
 
   const hasPrev = currentPage > 1;
@@ -184,7 +206,7 @@ async function fetchRecords() {
     if (!response.ok) throw new Error(data.error || "Error al cargar");
 
     records = data.records.map(formatRecord);
-    records.sort((a, b) => a.artist.localeCompare(b.artist));
+    records.sort((a, b) => compareByCreatedAt(a, b, sortOrder));
 
     fuse = new Fuse(records, {
       keys: ["album", "artist", "year", "status"],
@@ -295,5 +317,16 @@ resetFiltersBtn.addEventListener("click", () => {
   currentPage = 1;
   updateAllRecords();
 });
+
+if (sortToggleBtn) {
+  sortToggleBtn.addEventListener("click", () => {
+    sortOrder = sortOrder === "desc" ? "asc" : "desc";
+    const isAsc = sortOrder === "asc";
+    sortToggleBtn.textContent = isAsc ? "Mas viejos primero" : "Mas nuevos primero";
+    sortToggleBtn.setAttribute("aria-pressed", String(isAsc));
+    currentPage = 1;
+    updateAllRecords();
+  });
+}
 
 fetchRecords();
