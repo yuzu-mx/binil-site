@@ -9,9 +9,12 @@ import {
 } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBWfQM9yCLDegTgmZPOrF9knPoXHwgmzVc',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'spots-app-493222.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'spots-app-493222',
+  storageBucket: 'spots-app-493222.firebasestorage.app',
+  messagingSenderId: '1099210573428',
+  appId: '1:1099210573428:web:6229f4e03c25f93cca7321',
 };
 
 const app = initializeApp(firebaseConfig);
