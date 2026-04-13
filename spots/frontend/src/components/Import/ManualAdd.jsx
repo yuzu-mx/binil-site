@@ -69,11 +69,11 @@ export default function ManualAdd({ onBack }) {
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-spots-bg p-5">
+    <div className="h-full overflow-y-auto bg-spots-cream p-5">
       {/* Back button */}
       <button
         onClick={onBack}
-        className="flex items-center gap-1 text-spots-muted text-sm mb-4 hover:text-spots-text transition-colors"
+        className="flex items-center gap-1 text-spots-muted text-sm mb-4 hover:text-spots-dark transition-colors"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -81,12 +81,12 @@ export default function ManualAdd({ onBack }) {
         Volver
       </button>
 
-      <h2 className="text-xl font-bold text-spots-text mb-5">Agregar manualmente</h2>
+      <h2 className="text-2xl font-bold text-spots-dark mb-5">Agregar manualmente</h2>
 
       <div className="space-y-4">
         {/* Name */}
         <div>
-          <label className="text-spots-muted text-xs font-medium mb-1 block">
+          <label className="text-spots-muted text-xs font-semibold mb-1.5 block uppercase tracking-wide">
             Nombre del lugar
           </label>
           <input
@@ -94,13 +94,13 @@ export default function ManualAdd({ onBack }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="La Docena Oyster Bar"
-            className="w-full bg-spots-card border border-spots-border rounded-xl px-4 py-3 text-spots-text placeholder:text-spots-muted/50 focus:outline-none focus:border-spots-accent"
+            className="w-full bg-white border border-spots-border rounded-2xl px-4 py-3 text-spots-dark placeholder:text-spots-muted-light focus:outline-none focus:border-spots-mint focus:ring-2 focus:ring-spots-mint/20"
           />
         </div>
 
         {/* Category */}
         <div>
-          <label className="text-spots-muted text-xs font-medium mb-2 block">
+          <label className="text-spots-muted text-xs font-semibold mb-2 block uppercase tracking-wide">
             Categoria
           </label>
           <div className="flex flex-wrap gap-2">
@@ -108,10 +108,10 @@ export default function ManualAdd({ onBack }) {
               <button
                 key={cat.slug}
                 onClick={() => setCategory(cat.slug)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all ${
                   category === cat.slug
-                    ? 'bg-spots-accent/20 text-spots-accent border border-spots-accent/30'
-                    : 'bg-spots-card text-spots-muted border border-spots-border'
+                    ? 'bg-spots-mint text-spots-dark font-semibold shadow-sm'
+                    : 'bg-white text-spots-muted border border-spots-border'
                 }`}
               >
                 <span>{cat.emoji}</span>
@@ -123,7 +123,7 @@ export default function ManualAdd({ onBack }) {
 
         {/* Location search */}
         <div>
-          <label className="text-spots-muted text-xs font-medium mb-1 block">
+          <label className="text-spots-muted text-xs font-semibold mb-1.5 block uppercase tracking-wide">
             Ubicacion
           </label>
           <div className="flex gap-2">
@@ -133,12 +133,12 @@ export default function ManualAdd({ onBack }) {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="Buscar direccion o lugar..."
-              className="flex-1 bg-spots-card border border-spots-border rounded-xl px-4 py-3 text-spots-text placeholder:text-spots-muted/50 focus:outline-none focus:border-spots-accent"
+              className="flex-1 bg-white border border-spots-border rounded-2xl px-4 py-3 text-spots-dark placeholder:text-spots-muted-light focus:outline-none focus:border-spots-mint focus:ring-2 focus:ring-spots-mint/20"
             />
             <button
               onClick={handleSearch}
               disabled={searching}
-              className="bg-spots-accent text-white px-4 rounded-xl hover:bg-spots-accent-light transition-colors disabled:opacity-50"
+              className="bg-spots-dark text-spots-cream px-4 rounded-2xl hover:bg-spots-dark-light transition-colors disabled:opacity-50"
             >
               {searching ? '...' : '🔍'}
             </button>
@@ -156,13 +156,13 @@ export default function ManualAdd({ onBack }) {
                   setSearchResults([]);
                   if (!name.trim()) setName(result.name || '');
                 }}
-                className={`w-full text-left p-3 rounded-xl border transition-colors ${
+                className={`w-full text-left p-3 rounded-2xl border transition-all ${
                   selectedLocation?.lat === result.lat
-                    ? 'bg-spots-accent/10 border-spots-accent/30'
-                    : 'bg-spots-card border-spots-border hover:border-spots-muted'
+                    ? 'bg-spots-mint/10 border-spots-mint/30'
+                    : 'bg-white border-spots-border hover:border-spots-mint'
                 }`}
               >
-                <p className="text-spots-text text-sm font-medium">{result.name}</p>
+                <p className="text-spots-dark text-sm font-medium">{result.name}</p>
                 <p className="text-spots-muted text-xs">{result.address}</p>
               </button>
             ))}
@@ -171,18 +171,18 @@ export default function ManualAdd({ onBack }) {
 
         {/* Selected location badge */}
         {selectedLocation && searchResults.length === 0 && (
-          <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-xl p-3">
-            <span className="text-green-400">📍</span>
+          <div className="flex items-center gap-2 bg-spots-mint/10 border border-spots-mint/30 rounded-2xl p-3">
+            <span className="text-spots-mint text-lg">📍</span>
             <div className="flex-1">
-              <p className="text-green-400 text-sm font-medium">{selectedLocation.name || selectedLocation.address}</p>
-              <p className="text-green-400/60 text-xs">{selectedLocation.address}</p>
+              <p className="text-spots-dark text-sm font-medium">{selectedLocation.name || selectedLocation.address}</p>
+              <p className="text-spots-muted text-xs">{selectedLocation.address}</p>
             </div>
           </div>
         )}
 
         {/* Notes */}
         <div>
-          <label className="text-spots-muted text-xs font-medium mb-1 block">
+          <label className="text-spots-muted text-xs font-semibold mb-1.5 block uppercase tracking-wide">
             Notas (opcional)
           </label>
           <textarea
@@ -190,22 +190,22 @@ export default function ManualAdd({ onBack }) {
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Los mejores tacos de la ciudad..."
             rows={3}
-            className="w-full bg-spots-card border border-spots-border rounded-xl px-4 py-3 text-spots-text placeholder:text-spots-muted/50 focus:outline-none focus:border-spots-accent resize-none"
+            className="w-full bg-white border border-spots-border rounded-2xl px-4 py-3 text-spots-dark placeholder:text-spots-muted-light focus:outline-none focus:border-spots-mint focus:ring-2 focus:ring-spots-mint/20 resize-none"
           />
         </div>
 
         {/* Error */}
         {error && (
-          <p className="text-red-400 text-sm">{error}</p>
+          <p className="text-red-600 text-sm">{error}</p>
         )}
 
         {/* Save */}
         <button
           onClick={handleSave}
           disabled={saving || !name.trim() || !selectedLocation}
-          className="w-full bg-spots-accent text-white font-semibold py-3 rounded-xl hover:bg-spots-accent-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-spots-dark text-spots-cream font-semibold py-3.5 rounded-2xl hover:bg-spots-dark-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
         >
-          {saving ? 'Guardando...' : 'Guardar lugar'}
+          {saving ? 'Guardando...' : '📍 Guardar lugar'}
         </button>
       </div>
     </div>

@@ -17,12 +17,12 @@ html, body, #root {
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background-color: #0f0f1a;
-  color: #eaeaea;
+  background-color: #FFFAE8;
+  color: #113A36;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Bottom sheet transition */
+/* Bottom sheet transitions */
 .bottom-sheet-enter {
   transform: translateY(100%);
 }
@@ -35,9 +35,16 @@ body {
   transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Google Maps overrides */
+/* Google Maps dark style override */
 .gm-style {
-  background-color: #0f0f1a !important;
+  background-color: #1a1a2e !important;
+}
+
+/* Hide Google Maps UI chrome */
+.gm-style .gm-fullscreen-control,
+.gm-style .gm-svpc,
+.gm-style .gmnoprint:not(.gm-bundled-control) {
+  display: none !important;
 }
 
 /* Custom scrollbar */
@@ -48,7 +55,7 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a45;
+  background: #E8DFC0;
   border-radius: 2px;
 }
 
@@ -59,4 +66,31 @@ body {
 }
 .animate-pulse-dot {
   animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* Slide up animation */
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Fade in */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Filter chips horizontal scroll - hide scrollbar */
+.filter-chips::-webkit-scrollbar {
+  display: none;
+}
+.filter-chips {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

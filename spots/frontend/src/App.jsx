@@ -12,10 +12,11 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="h-full flex items-center justify-center bg-spots-bg">
+      <div className="h-full flex items-center justify-center bg-spots-cream">
         <div className="text-center">
-          <div className="text-4xl mb-3 animate-pulse-dot">📍</div>
-          <p className="text-spots-muted text-sm">Cargando Spots...</p>
+          <div className="text-5xl mb-3 animate-pulse-dot">📍</div>
+          <p className="text-spots-dark font-bold text-lg">Spots</p>
+          <p className="text-spots-muted text-sm mt-1">Cargando...</p>
         </div>
       </div>
     );

@@ -61,10 +61,10 @@ export default function ImportUrl() {
   }
 
   return (
-    <div className="h-full overflow-y-auto bg-spots-bg p-5">
-      <h2 className="text-xl font-bold text-spots-text mb-1">Agregar lugar</h2>
+    <div className="h-full overflow-y-auto bg-spots-cream p-5">
+      <h2 className="text-2xl font-bold text-spots-dark mb-1">Agregar spot</h2>
       <p className="text-spots-muted text-sm mb-6">
-        Pega una URL de Instagram o TikTok y encontraremos el lugar
+        Pega un link de TikTok o Instagram y encontramos el lugar
       </p>
 
       {/* URL Form */}
@@ -73,20 +73,20 @@ export default function ImportUrl() {
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://www.instagram.com/reel/..."
-          className="w-full bg-spots-card border border-spots-border rounded-xl px-4 py-3 text-spots-text placeholder:text-spots-muted/50 focus:outline-none focus:border-spots-accent transition-colors"
+          placeholder="E.g. https://www.tiktok.com/@user/video..."
+          className="w-full bg-white border border-spots-border rounded-2xl px-4 py-3.5 text-spots-dark placeholder:text-spots-muted-light focus:outline-none focus:border-spots-mint focus:ring-2 focus:ring-spots-mint/20 transition-all"
         />
         <input
           type="text"
           value={hint}
           onChange={(e) => setHint(e.target.value)}
           placeholder="Pista: nombre del lugar o ciudad (opcional)"
-          className="w-full bg-spots-card border border-spots-border rounded-xl px-4 py-3 text-spots-text placeholder:text-spots-muted/50 focus:outline-none focus:border-spots-accent transition-colors"
+          className="w-full bg-white border border-spots-border rounded-2xl px-4 py-3.5 text-spots-dark placeholder:text-spots-muted-light focus:outline-none focus:border-spots-mint focus:ring-2 focus:ring-spots-mint/20 transition-all"
         />
         <button
           type="submit"
           disabled={processing || !url.trim()}
-          className="w-full bg-spots-accent text-white font-semibold py-3 rounded-xl hover:bg-spots-accent-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-spots-dark text-spots-cream font-semibold py-3.5 rounded-2xl hover:bg-spots-dark-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
         >
           {processing ? (
             <span className="flex items-center justify-center gap-2">
@@ -100,38 +100,38 @@ export default function ImportUrl() {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-4">
-          <p className="text-red-400 text-sm">{error}</p>
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-4">
+          <p className="text-red-600 text-sm">{error}</p>
         </div>
       )}
 
       {/* Result preview */}
       {result?.place && (
-        <div className="bg-spots-card border border-spots-border rounded-xl p-4 mb-4">
+        <div className="bg-spots-mint/10 border border-spots-mint/30 rounded-2xl p-4 mb-4 animate-fade-in">
           <div className="flex items-start gap-3 mb-3">
             {result.thumbnail && (
               <img
                 src={result.thumbnail}
                 alt=""
-                className="w-16 h-16 rounded-lg object-cover"
+                className="w-16 h-16 rounded-xl object-cover"
               />
             )}
             <div className="flex-1">
-              <h3 className="text-spots-text font-semibold">
+              <h3 className="text-spots-dark font-bold">
                 {result.place.emoji} {result.place.name}
               </h3>
               <p className="text-spots-muted text-sm">{result.place.address}</p>
               <p className="text-spots-muted text-xs mt-1">
-                {result.place.city}, {result.place.country}
+                {result.place.city}{result.place.country ? `, ${result.place.country}` : ''}
               </p>
               {result.place.confidence && (
                 <span
-                  className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${
+                  className={`inline-block mt-1.5 text-xs px-2 py-0.5 rounded-full font-medium ${
                     result.place.confidence === 'high'
-                      ? 'bg-green-500/20 text-green-400'
+                      ? 'bg-spots-mint/20 text-spots-dark'
                       : result.place.confidence === 'medium'
-                        ? 'bg-yellow-500/20 text-yellow-400'
-                        : 'bg-red-500/20 text-red-400'
+                        ? 'bg-spots-yellow/30 text-spots-dark'
+                        : 'bg-red-100 text-red-600'
                   }`}
                 >
                   Confianza: {result.place.confidence}
@@ -142,10 +142,20 @@ export default function ImportUrl() {
           <button
             onClick={handleSaveResult}
             disabled={saving}
-            className="w-full bg-spots-accent text-white font-semibold py-2.5 rounded-xl hover:bg-spots-accent-light transition-colors disabled:opacity-50"
+            className="w-full bg-spots-mint text-spots-dark font-semibold py-3 rounded-xl hover:bg-spots-mint-dark transition-colors disabled:opacity-50 active:scale-[0.98]"
           >
-            {saving ? 'Guardando...' : 'Guardar en mi mapa'}
+            {saving ? 'Guardando...' : '📍 Guardar en mi mapa'}
           </button>
+        </div>
+      )}
+
+      {/* No place found */}
+      {result && !result.place && (
+        <div className="bg-spots-yellow/15 border border-spots-yellow/30 rounded-2xl p-4 mb-4">
+          <p className="text-spots-dark text-sm font-medium">No se encontro el lugar</p>
+          <p className="text-spots-muted text-sm mt-1">
+            {result.message || 'Intenta agregar una pista o usa el modo manual.'}
+          </p>
         </div>
       )}
 
@@ -159,7 +169,7 @@ export default function ImportUrl() {
       {/* Manual add */}
       <button
         onClick={() => setMode('manual')}
-        className="w-full bg-spots-card border border-spots-border text-spots-text font-medium py-3 rounded-xl hover:bg-spots-surface transition-colors"
+        className="w-full bg-white border border-spots-border text-spots-dark font-medium py-3.5 rounded-2xl hover:bg-spots-surface transition-colors active:scale-[0.98]"
       >
         Agregar manualmente
       </button>
