@@ -3,7 +3,7 @@ import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import { getPlaces } from '../../api/client';
 import PinDetail from './PinDetail';
 
-const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
+const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const DEFAULT_CENTER = { lat: 19.4326, lng: -99.1332 }; // CDMX
 const DEFAULT_ZOOM = 12;
 
