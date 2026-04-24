@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #FFFAE8;
+  color: #113A36;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Bottom sheet transitions */
+.bottom-sheet-enter {
+  transform: translateY(100%);
+}
+.bottom-sheet-active {
+  transform: translateY(0);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.bottom-sheet-exit {
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Google Maps dark style override */
+.gm-style {
+  background-color: #1a1a2e !important;
+}
+
+/* Hide Google Maps UI chrome */
+.gm-style .gm-fullscreen-control,
+.gm-style .gm-svpc,
+.gm-style .gmnoprint:not(.gm-bundled-control) {
+  display: none !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E8DFC0;
+  border-radius: 2px;
+}
+
+/* Pulse animation for loading */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* Slide up animation */
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Fade in */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Filter chips horizontal scroll - hide scrollbar */
+.filter-chips::-webkit-scrollbar {
+  display: none;
+}
+.filter-chips {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
